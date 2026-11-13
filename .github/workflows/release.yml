@@ -1,45 +1,33 @@
----
-name: "release"
+name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    tags: ["v*"]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  package:
+    name: Package and publish the release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      # Creates the release and uploads the package.
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Get tag name
-        uses: olegtarasov/get-tag@v2
-        id: tagName
-
-      - name: Package release
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Package
+        # music.ini is the editable source of music.reg; the game reads only the .reg.
         run: |
           rm -f res/music.ini
-          7z a -r evil_islands_hq_music_${{ env.GIT_TAG_NAME }}.zip res stream
-
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
+          7z a -r "evil_islands_hq_music_${TAG}.zip" res stream
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.GIT_TAG_NAME }}
-          release_name: ${{ env.GIT_TAG_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload release asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+          TAG: ${{ github.ref_name }}
+      - name: Publish the release
+        run: gh release create "$TAG" "evil_islands_hq_music_${TAG}.zip" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: evil_islands_hq_music_${{ env.GIT_TAG_NAME }}.zip
-          asset_name: evil_islands_hq_music_${{ env.GIT_TAG_NAME }}.zip
-          asset_content_type: application/zip
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
