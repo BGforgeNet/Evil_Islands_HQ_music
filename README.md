@@ -13,7 +13,7 @@ The FLAC tracks come from the lossless soundtrack release and follow the game's 
 
 ## Requirements
 
-- [eix](https://github.com/BGforgeNet/eix) PENDING-eix-version or later, which plays FLAC music and reads `EIX_GAIN`.
+- [eix](https://github.com/BGforgeNet/eix) 0.2.0 or later, which plays FLAC music and reads `EIX_GAIN`.
   Without eix, the game plays its own MP3 tracks.
 
 ## Installation
