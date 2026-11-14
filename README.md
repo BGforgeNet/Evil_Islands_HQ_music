@@ -18,4 +18,8 @@ The FLAC tracks come from the lossless soundtrack release and follow the game's 
 
 ## Installation
 
-Download the latest release, extract into main game directory.
+Download the latest release and either:
+
+- Run the installer (`.exe`). It finds the game folder and checks that it holds `game.exe`. Uninstalling it puts the
+  game's own files back.
+- Or extract the zip into the main game directory.

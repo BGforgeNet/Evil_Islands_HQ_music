@@ -31,18 +31,26 @@ jobs:
         env:
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
-      # Nightly builds: the zip itself, not zipped again.
-      - name: Upload the nightly
+      # Nightly builds: the zip and the installer themselves, not zipped again; one file per unzipped upload.
+      - name: Upload the nightly zip
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           path: ${{ steps.package.outputs.zip }}
           archive: false
           if-no-files-found: error
+      - name: Upload the nightly installer
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          path: ${{ steps.package.outputs.exe }}
+          archive: false
+          if-no-files-found: error
       - name: Publish the release
         if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
-        run: gh release create "$TAG" "$ZIP" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --generate-notes
+        run: gh release create "$TAG" "$EXE" "$ZIP" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
+          EXE: ${{ steps.package.outputs.exe }}
           ZIP: ${{ steps.package.outputs.zip }}
