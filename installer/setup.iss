@@ -44,17 +44,17 @@ en.SelectGame=Select the Evil Islands folder, the one with game.exe.
 en.NoGame=There is no game.exe in this folder. Select the Evil Islands folder.
 en.NoEixCaption=eix not found
 en.NoEixDesc=The lossless music needs eix 0.2.0 or later.
-en.NoEix=eix 0.2.0 or later was not found in EIStarter-UM's folder or its mods. Without it, the game keeps playing its own MP3 music.%n%nGet eix at https://github.com/BGforgeNet/eix/releases. You can install it before or after this music.%n%nClick Next to install the music anyway.
+en.NoEix=eix 0.2.0 or later was not found in EIStarter-UM's folder or its mods. Without it, the game keeps playing its own MP3 music.%n%nThe easiest way to get it is the EItweaks installer, with EIStarter-UM (its recommended choice): https://github.com/BGforgeNet/EItweaks/releases%n%neix alone, set up by hand: https://github.com/BGforgeNet/eix/releases%n%nEither can be installed before or after this music.%n%nClick Next to install the music anyway.
 ru.SelectGame=Выберите папку Проклятых Земель, в которой находится game.exe.
 ru.NoGame=В этой папке нет game.exe. Выберите папку Проклятых Земель.
 ru.NoEixCaption=eix не найден
 ru.NoEixDesc=Для музыки без потерь нужен eix 0.2.0 или новее.
-ru.NoEix=eix 0.2.0 или новее не найден ни в папке EIStarter-UM, ни в её модах. Без него игра продолжит играть свою музыку MP3.%n%neix можно скачать на https://github.com/BGforgeNet/eix/releases. Его можно установить до или после этой музыки.%n%nНажмите "Далее", чтобы всё равно установить музыку.
+ru.NoEix=eix 0.2.0 или новее не найден ни в папке EIStarter-UM, ни в её модах. Без него игра продолжит играть свою музыку MP3.%n%nПроще всего получить его с установщиком EItweaks, вариант с EIStarter-UM (рекомендуемый): https://github.com/BGforgeNet/EItweaks/releases%n%nТолько eix, с ручной настройкой: https://github.com/BGforgeNet/eix/releases%n%nИх можно установить до или после этой музыки.%n%nНажмите "Далее", чтобы всё равно установить музыку.
 de.SelectGame=Wählen Sie den Ordner von Evil Islands, in dem game.exe liegt.
 de.NoGame=In diesem Ordner gibt es keine game.exe. Wählen Sie den Ordner von Evil Islands.
 de.NoEixCaption=eix nicht gefunden
 de.NoEixDesc=Die verlustfreie Musik braucht eix 0.2.0 oder neuer.
-de.NoEix=eix 0.2.0 oder neuer wurde weder im Ordner von EIStarter-UM noch in seinen Mods gefunden. Ohne eix spielt das Spiel weiter seine eigene MP3-Musik.%n%neix gibt es unter https://github.com/BGforgeNet/eix/releases. Sie können es vor oder nach dieser Musik installieren.%n%nKlicken Sie auf "Weiter", um die Musik trotzdem zu installieren.
+de.NoEix=eix 0.2.0 oder neuer wurde weder im Ordner von EIStarter-UM noch in seinen Mods gefunden. Ohne eix spielt das Spiel weiter seine eigene MP3-Musik.%n%nAm einfachsten bekommen Sie es mit dem Installer von EItweaks, in der Variante mit EIStarter-UM (empfohlen): https://github.com/BGforgeNet/EItweaks/releases%n%nNur eix, von Hand eingerichtet: https://github.com/BGforgeNet/eix/releases%n%nBeides kann vor oder nach dieser Musik installiert werden.%n%nKlicken Sie auf "Weiter", um die Musik trotzdem zu installieren.
 
 [Files]
 ; music.ini is the editable source of music.reg; the game reads only the .reg.
