@@ -6,7 +6,7 @@ It also restores several tracks that are present in the game, but never used.
 
 ## Requirements
 
-[eix](https://github.com/BGforgeNet/eix) 0.2.0 or later, which plays FLAC music and reads `EIX_GAIN`.
+[eix](https://github.com/BGforgeNet/eix) 0.3.0 or later, which plays FLAC music and reads `EIX_GAIN`.
 
 Without eix, the game plays its own MP3 tracks. The easiest way to get eix is with [EItweaks](https://github.com/BGforgeNet/EItweaks/releases).
 

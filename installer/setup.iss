@@ -9,6 +9,9 @@
   #error Define Version
 #endif
 
+; The oldest eix the music is for; README.md names the same version.
+#define MinEix "0.3.0"
+
 [Setup]
 AppId=EvilIslandsHQMusic
 AppName=Evil Islands HQ music
@@ -43,18 +46,18 @@ Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 en.SelectGame=Select the Evil Islands folder, the one with game.exe.
 en.NoGame=There is no game.exe in this folder. Select the Evil Islands folder.
 en.NoEixCaption=eix not found
-en.NoEixDesc=The lossless music needs eix 0.2.0 or later.
-en.NoEix=eix 0.2.0 or later was not found in EIStarter-UM's folder or its mods. Without it, the game keeps playing its own MP3 music.%n%nThe easiest way to get it is the EItweaks installer, with EIStarter-UM (its recommended choice): https://github.com/BGforgeNet/EItweaks/releases%n%neix alone, set up by hand: https://github.com/BGforgeNet/eix/releases%n%nEither can be installed before or after this music.%n%nClick Next to install the music anyway.
+en.NoEixDesc=The lossless music needs eix {#MinEix} or later.
+en.NoEix=eix {#MinEix} or later was not found in EIStarter-UM's folder or its mods. Without it, the game keeps playing its own MP3 music.%n%nThe easiest way to get it is the EItweaks installer, with EIStarter-UM (its recommended choice): https://github.com/BGforgeNet/EItweaks/releases%n%neix alone, set up by hand: https://github.com/BGforgeNet/eix/releases%n%nEither can be installed before or after this music.%n%nClick Next to install the music anyway.
 ru.SelectGame=Выберите папку Проклятых Земель, в которой находится game.exe.
 ru.NoGame=В этой папке нет game.exe. Выберите папку Проклятых Земель.
 ru.NoEixCaption=eix не найден
-ru.NoEixDesc=Для музыки без потерь нужен eix 0.2.0 или новее.
-ru.NoEix=eix 0.2.0 или новее не найден ни в папке EIStarter-UM, ни в её модах. Без него игра продолжит играть свою музыку MP3.%n%nПроще всего получить его с установщиком EItweaks, вариант с EIStarter-UM (рекомендуемый): https://github.com/BGforgeNet/EItweaks/releases%n%nТолько eix, с ручной настройкой: https://github.com/BGforgeNet/eix/releases%n%nИх можно установить до или после этой музыки.%n%nНажмите "Далее", чтобы всё равно установить музыку.
+ru.NoEixDesc=Для музыки без потерь нужен eix {#MinEix} или новее.
+ru.NoEix=eix {#MinEix} или новее не найден ни в папке EIStarter-UM, ни в её модах. Без него игра продолжит играть свою музыку MP3.%n%nПроще всего получить его с установщиком EItweaks, вариант с EIStarter-UM (рекомендуемый): https://github.com/BGforgeNet/EItweaks/releases%n%nТолько eix, с ручной настройкой: https://github.com/BGforgeNet/eix/releases%n%nИх можно установить до или после этой музыки.%n%nНажмите "Далее", чтобы всё равно установить музыку.
 de.SelectGame=Wählen Sie den Ordner von Evil Islands, in dem game.exe liegt.
 de.NoGame=In diesem Ordner gibt es keine game.exe. Wählen Sie den Ordner von Evil Islands.
 de.NoEixCaption=eix nicht gefunden
-de.NoEixDesc=Die verlustfreie Musik braucht eix 0.2.0 oder neuer.
-de.NoEix=eix 0.2.0 oder neuer wurde weder im Ordner von EIStarter-UM noch in seinen Mods gefunden. Ohne eix spielt das Spiel weiter seine eigene MP3-Musik.%n%nAm einfachsten bekommen Sie es mit dem Installer von EItweaks, in der Variante mit EIStarter-UM (empfohlen): https://github.com/BGforgeNet/EItweaks/releases%n%nNur eix, von Hand eingerichtet: https://github.com/BGforgeNet/eix/releases%n%nBeides kann vor oder nach dieser Musik installiert werden.%n%nKlicken Sie auf "Weiter", um die Musik trotzdem zu installieren.
+de.NoEixDesc=Die verlustfreie Musik braucht eix {#MinEix} oder neuer.
+de.NoEix=eix {#MinEix} oder neuer wurde weder im Ordner von EIStarter-UM noch in seinen Mods gefunden. Ohne eix spielt das Spiel weiter seine eigene MP3-Musik.%n%nAm einfachsten bekommen Sie es mit dem Installer von EItweaks, in der Variante mit EIStarter-UM (empfohlen): https://github.com/BGforgeNet/EItweaks/releases%n%nNur eix, von Hand eingerichtet: https://github.com/BGforgeNet/eix/releases%n%nBeides kann vor oder nach dieser Musik installiert werden.%n%nKlicken Sie auf "Weiter", um die Musik trotzdem zu installieren.
 
 [Files]
 ; music.ini is the editable source of music.reg; the game reads only the .reg.
@@ -115,15 +118,41 @@ begin
     Confirm := False;
 end;
 
-{ Whether the addon.dll in Dir is eix 0.2.0 or later: from that version on it reads the EIX_GAIN tag, and its name
-  is in the file. eix carries no version resource to read instead. }
+{ The eix version an addon.dll names in its "eix <version> (commit <hash>)" line, or '' when it names none. eix carries
+  no version resource to read instead. }
+function EixVersion(const Data: AnsiString): String;
+var
+  At, Start: Integer;
+begin
+  Result := '';
+  At := Pos(' (commit ', Data);
+  if At = 0 then
+    Exit;
+  Start := At - 1;
+  while (Start > 0) and (Data[Start] <> ' ') do
+    Start := Start - 1;
+  if (Start > 3) and (Copy(Data, Start - 3, 4) = 'eix ') then
+    Result := Copy(Data, Start + 1, At - Start - 1);
+end;
+
+{ Whether the addon.dll in Dir is eix {#MinEix} or later. }
 function IsEixAddon(const Dir: String): Boolean;
 var
   Data: AnsiString;
+  Found: String;
+  Have, Need: Int64;
 begin
-  Result := LoadStringFromFile(AddBackslash(Dir) + 'addon.dll', Data) and (Pos('EIX_GAIN', Data) > 0);
-  if Result then
-    Log('eix 0.2.0 or later in ' + Dir);
+  Result := False;
+  if not LoadStringFromFile(AddBackslash(Dir) + 'addon.dll', Data) then
+    Exit;
+  Found := EixVersion(Data);
+  if (Found = '') or not StrToVersion(Found, Have) or not StrToVersion('{#MinEix}', Need) then
+    Log('addon.dll in ' + Dir + ' names no eix version')
+  else
+  begin
+    Result := ComparePackedVersion(Have, Need) >= 0;
+    Log('eix ' + Found + ' in ' + Dir);
+  end;
 end;
 
 { eix's addon.dll goes into EIStarter-UM's folder, or a mod's folder under it (EItweaks); the game folder is checked
@@ -188,7 +217,7 @@ begin
   if not HasGame(WizardDirValue) then
     Result := CustomMessage('NoGame')
   else if WizardSilent and not FindEix then
-    Log('eix 0.2.0 or later not found: the game will play its own MP3 music');
+    Log('eix {#MinEix} or later not found: the game will play its own MP3 music');
 end;
 
 { Before each file is copied: keeps the game's original once, under hq-music\backup. }
