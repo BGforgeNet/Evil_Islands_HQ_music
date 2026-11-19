@@ -8,6 +8,7 @@
 
 [**Download**](https://github.com/BGforgeNet/Evil_Islands_HQ_music/releases/latest)
 | [**Report issues**](https://github.com/BGforgeNet/Evil_Islands_HQ_music/issues)
+| [**Discuss**](https://forums.bgforge.net/viewtopic.php?f=22&t=183)
 
 This mod for Evil Islands: Curse of the Lost Soul provides high quality in-game music.
 
